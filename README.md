@@ -1,2 +1,8 @@
-kết quả đạt được tại commit 2: <img src="ketqua/ketqua_commit2.png" alt="Ảnh 1" width="200">
-kết quả đạt được tại commit 3: <img src="ketqua/ketqua_commit3.png" alt="Ảnh 2" width="200">
+kết quả đạt được tại commit 2:
+
+![Ảnh 1](https://github.com/HoangTuan2112/app_tinh_diem/blob/master/ketqua/ket_qua_commit2.png)
+
+
+kết quả đạt được tại commit 3:
+
+![Ảnh 2](https://github.com/HoangTuan2112/app_tinh_diem/blob/master/ketqua/ket_qua_commit3.png)
