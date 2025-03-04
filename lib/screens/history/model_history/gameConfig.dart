@@ -7,7 +7,7 @@ class GameConfig  {
   late bool _isAutoCalculate;
   late int _currentRound;
  
-  GameConfig (bool isLimitPoints, int limitPoints, bool isLimitRound, int limitRound, bool isAutoCalculate, int currentRound){
+  GameConfig ({required bool isLimitPoints, required int limitPoints, required bool isLimitRound, required int limitRound, required bool isAutoCalculate, required int currentRound}) {
     this._isLimitPoints = isLimitPoints;
     this._limitPoints = limitPoints;
     this._isLimitRound = isLimitRound;
@@ -15,6 +15,14 @@ class GameConfig  {
     this._isAutoCalculate = isAutoCalculate;
     this._currentRound = currentRound;
    
+  }
+  GameConfig.empty(){
+    this._isLimitPoints = false;
+    this._limitPoints = 0;
+    this._isLimitRound = false;
+    this._limitRound = 0;
+    this._isAutoCalculate = false;
+    this._currentRound = 0;
   }
   bool get isLimitPoints => _isLimitPoints;
   int get limitPoints => _limitPoints;

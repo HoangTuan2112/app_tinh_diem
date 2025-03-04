@@ -1,3 +1,6 @@
+import 'package:app_tinh_diem/screens/history/model_history/gameConfig.dart';
+import 'package:app_tinh_diem/screens/history/model_history/gameInfo.dart';
+import 'package:app_tinh_diem/screens/history/model_history/playerInfo.dart';
 import 'package:flutter/material.dart';
 
 class GameComponent extends StatefulWidget {
@@ -13,9 +16,11 @@ class GameComponent extends StatefulWidget {
   late bool _isAutoCalculate;
   late int _currentRound;
    */
-  final String a;
-  final String b;
-  const GameComponent({super.key, required this.a, required this.b});
+
+// final GameConfig gameConfig = GameConfig.empty();
+// final PlayerInfo playerInfo = PlayerInfo.empty();
+  final GameInfo? gameInfo;
+  GameComponent({super.key, required this.gameInfo});
 
   @override
   State<GameComponent> createState() => _GameComponentState();
@@ -24,32 +29,126 @@ class GameComponent extends StatefulWidget {
 class _GameComponentState extends State<GameComponent> {
   @override
   Widget build(BuildContext context) {
-    return infoComponent(widget.a, widget.b);
+    return infoComponent(widget.gameInfo!);
   }
-  
-  Widget infoComponent(String a, String b) {
+
+  Widget infoComponent(GameInfo gameInfo) {
+    // noi chuoi danh sach player
+    String name = '';
+    for (var i = 0; i < gameInfo.playerInfo.length; i++) {
+      if (i != gameInfo.playerInfo.length - 1) {
+        name += gameInfo.playerInfo[i].name.toString() + ', ';
+      } else {
+        name += gameInfo.playerInfo[i].name.toString();
+      }
+    }
+
+    String limit = '';
+    //noi chuoi limit thanh "gioi han diem: gameInfo.gameConfig.limitPoints, gioi han vong: gameInfo.gameConfig.limitRound"
+    if (gameInfo.gameConfig?.isLimitPoints == true) {
+      if (gameInfo.gameConfig?.isLimitRound == true) {
+        limit +=
+            'gioi han diem: ${gameInfo.gameConfig?.limitPoints}, gioi han vong: ${gameInfo.gameConfig?.limitRound}';
+      } else {
+        limit += 'gioi han diem: ${gameInfo.gameConfig?.limitPoints}';
+      }
+    } else {
+      if (gameInfo.gameConfig?.isLimitRound == true) {
+        limit += 'gioi han vong: ${gameInfo.gameConfig?.limitRound}';
+      }
+    }
+
+    //Noi chuoi thoi gian
+    String time = '';
+    DateTime now = DateTime.now();
+    if (gameInfo.now?.day == now.day) {
+      time = 'Hôm nay';
+    } else {
+      if (gameInfo.now?.day == now.day - 1) {
+        time = 'Hôm qua';
+      } else {
+        time = gameInfo.now.toString();
+      }
+    }
+
     return Container(
       padding: EdgeInsets.all(10),
-      height: MediaQuery.of(context).size.height * 0.12, 
+      height: MediaQuery.of(context).size.height * 0.12,
+      color: Colors.grey[300],
       child: Row(
         children: [
           Expanded(
             flex: 4,
             child: FractionallySizedBox(
-              heightFactor: 1.0, // Set the height to 100% of the parent container's height
-              child: Container(
-                color: Colors.blue,
-                child: Center(child: Text(a)),
+              heightFactor:
+                  1.0, // Set the height to 100% of the parent container's height
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        limit,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        time,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
           Expanded(
             flex: 2,
             child: FractionallySizedBox(
-              heightFactor: 1.0, // Set the height to 100% of the parent container's height
+              heightFactor:
+                  1.0, // Set the height to 100% of the parent container's height
               child: Container(
-                color: Colors.red,
-                child: Center(child: Text(b)),
+                color: Colors.grey[300],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      // Hoặc Container(width: 40, child: ...)
+                      width: 40, // Điều chỉnh chiều rộng này
+                      child: TextButton(
+                        onPressed: () => {},
+                        child: Icon(Icons.copy, size: 20, color: Colors.black),
+                      ),
+                    ),
+                    SizedBox(
+                      // Hoặc Container(width: 40, child: ...)
+                      width: 40, // Điều chỉnh chiều rộng này
+                      child: TextButton(
+                        onPressed: () => {},
+                        child: Icon(Icons.delete, size: 20, color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

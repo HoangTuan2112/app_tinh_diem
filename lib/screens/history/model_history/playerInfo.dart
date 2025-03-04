@@ -6,6 +6,10 @@ class PlayerInfo {
     this._name = name;
     this._point = point;
   }
+  PlayerInfo.empty(){
+    this._name = '';
+    this._point = 0;
+  }
   String? get name => _name;
   double? get point => _point;
   set name(String? name){
