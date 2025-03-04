@@ -1,16 +1,4 @@
-# app_tinh_diem
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+kết quả đạt được tại commit 2:
+![Ảnh 1](ketqua/ketqua_commit2.png)
+kết quả đạt được tại commit 3:
+![Ảnh 2](ketqua/ketqua_commit3.png)
