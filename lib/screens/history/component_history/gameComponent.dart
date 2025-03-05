@@ -1,26 +1,15 @@
-import 'package:app_tinh_diem/screens/history/model_history/gameConfig.dart';
+import 'package:app_tinh_diem/screens/history/mockAPI_service/api_service.dart';
 import 'package:app_tinh_diem/screens/history/model_history/gameInfo.dart';
-import 'package:app_tinh_diem/screens/history/model_history/playerInfo.dart';
+
 import 'package:flutter/material.dart';
 
 class GameComponent extends StatefulWidget {
-  /*  List<PlayerInfo> _playerInfo=[];
-  GameConfig? _gameConfig;
-  DateTime now = DateTime.now();
-    String? _name;
-  double? _point;
-     late bool _isLimitPoints;
-  late int _limitPoints;
-  late bool _isLimitRound;
-  late int _limitRound;
-  late bool _isAutoCalculate;
-  late int _currentRound;
-   */
 
-// final GameConfig gameConfig = GameConfig.empty();
-// final PlayerInfo playerInfo = PlayerInfo.empty();
   final GameInfo? gameInfo;
-  GameComponent({super.key, required this.gameInfo});
+  final VoidCallback? onDelete;
+  final VoidCallback onCoppy;
+  GameComponent({super.key, required this.gameInfo, this.onDelete, required this.onCoppy});
+
 
   @override
   State<GameComponent> createState() => _GameComponentState();
@@ -130,25 +119,51 @@ class _GameComponentState extends State<GameComponent> {
             flex: 2,
             child: FractionallySizedBox(
               heightFactor:
-                  1.0, // Set the height to 100% of the parent container's height
+                  1.0,
               child: Container(
                 color: Colors.grey[300],
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SizedBox(
-                      // Hoặc Container(width: 40, child: ...)
-                      width: 40, // Điều chỉnh chiều rộng này
+                      width: 40,
                       child: TextButton(
-                        onPressed: () => {},
+                        onPressed: () async {
+                          try {
+                            final copiedGame = await copyGame(widget.gameInfo!.id!);
+                            // Xử lý sau khi copy thành công (ví dụ: hiển thị thông báo)
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Copied game successful ${copiedGame.id}')),
+                            );
+                            widget.onCoppy.call();
+                          } catch (e) {
+                            // Xử lý lỗi copy
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to copy game: $e')),
+                            );
+                          }
+                        },
                         child: Icon(Icons.copy, size: 20, color: Colors.black),
                       ),
                     ),
                     SizedBox(
-                      // Hoặc Container(width: 40, child: ...)
-                      width: 40, // Điều chỉnh chiều rộng này
+
+                      width: 40,
                       child: TextButton(
-                        onPressed: () => {},
+                        onPressed: () async {
+                          try {
+                            print(widget.gameInfo!.id!.toString());
+
+                            await deleteGame(widget.gameInfo!.id!);
+                            // Xử lý sau khi delete thành công
+                            widget.onDelete?.call();
+                          } catch (e) {
+                            // Xử lý lỗi delete
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to delete game: $e')),
+                            );
+                          }
+                        },
                         child: Icon(Icons.delete, size: 20, color: Colors.black),
                       ),
                     ),

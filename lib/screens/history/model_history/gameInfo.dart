@@ -2,14 +2,16 @@ import 'package:app_tinh_diem/screens/history/model_history/gameConfig.dart';
 import 'package:app_tinh_diem/screens/history/model_history/playerInfo.dart';
 
 class GameInfo {
+  String? _id;
   List<PlayerInfo> _playerInfo = [];
   GameConfig? _gameConfig;
   DateTime? now;
 
   GameInfo(
-      {required List<PlayerInfo> playerInfo,
+      {required String id ,required List<PlayerInfo> playerInfo,
       required GameConfig gameConfig,
       required DateTime now}) {
+    this._id=id;
     this._playerInfo = playerInfo;
     this._gameConfig = gameConfig;
     this.now = now;
@@ -21,14 +23,12 @@ class GameInfo {
     this.now = DateTime.now();
   }
 
-  // GameInfo.now({required List<PlayerInfo> playerInfo, required GameConfig gameConfig, required DateTime time}){
-  //   this._playerInfo = playerInfo;
-  //   this._gameConfig = gameConfig;
-  //   this.now = time;
-  // }
+
   List<PlayerInfo> get playerInfo => _playerInfo;
 
   GameConfig? get gameConfig => _gameConfig;
+
+  String? get id => _id;
 
   set playerInfo(List<PlayerInfo> playerInfo) {
     this._playerInfo = playerInfo;
@@ -62,7 +62,7 @@ class GameInfo {
           .map((playerJson) => PlayerInfo.fromJson(playerJson))
           .toList(),
       gameConfig: GameConfig.fromJson(json['gameConfig']),
-      now: DateTime.parse(json['now']),
+      now: DateTime.parse(json['now']), id: json['id'],
     );
   }
 }

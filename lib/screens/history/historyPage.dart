@@ -12,11 +12,24 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  late Future<List<GameInfo>> _gamesFuture =[] as Future<List<GameInfo>>;
+  late Future<List<GameInfo>> _gamesFuture = [] as Future<List<GameInfo>>;
+
   @override
   void initState() {
     super.initState();
     _gamesFuture = fetchGames();
+  }
+
+  void _onDeleteGame() {
+    setState(() {
+      _gamesFuture = fetchGames(); // Fetch lại danh sách game
+    });
+  }
+
+  void _onCoppyGame() {
+    setState(() {
+      _gamesFuture = fetchGames(); // Fetch lại danh sách game
+    });
   }
 
   @override
@@ -45,16 +58,22 @@ class _HistoryPageState extends State<HistoryPage> {
           Expanded(
             child: Container(
               padding: EdgeInsets.all(10),
-              child: FutureBuilder<List<GameInfo>>( // Sử dụng FutureBuilder
+              child: FutureBuilder<List<GameInfo>>(
+                // Sử dụng FutureBuilder
                 future: _gamesFuture,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
-                      itemCount: snapshot.data!.length, // Truy cập length từ snapshot.data
+                      itemCount: snapshot.data!.length,
+                      // Truy cập length từ snapshot.data
                       itemBuilder: (context, index) {
                         return Column(
                           children: [
-                            GameComponent(gameInfo: snapshot.data![index]), // Truy cập dữ liệu từ snapshot.data
+                            GameComponent(
+                                gameInfo: snapshot.data![index],
+                                onDelete: _onDeleteGame,
+                                onCoppy: _onCoppyGame),
+                            // Truy cập dữ liệu từ snapshot.data
                             SizedBox(
                               height: 16,
                             ),
