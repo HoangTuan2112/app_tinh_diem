@@ -1,0 +1,437 @@
+[
+  {
+    "playerInfo": [
+      {
+        "name": "A",
+        "point": 1
+      },
+      {
+        "name": "B",
+        "point": 2
+      },
+      {
+        "name": "C",
+        "point": 3
+      },
+      {
+        "name": "D",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": false,
+      "limitPoints": 0,
+      "isLimitRound": true,
+      "limitRound": 5,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-01-01T01:01:01.000"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A2",
+        "point": 1
+      },
+      {
+        "name": "B2",
+        "point": 2
+      },
+      {
+        "name": "C2",
+        "point": 3
+      },
+      {
+        "name": "D2",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": true,
+      "limitPoints": 10,
+      "isLimitRound": true,
+      "limitRound": 8,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-01-01T01:01:01.000"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A3",
+        "point": 1
+      },
+      {
+        "name": "B3",
+        "point": 2
+      },
+      {
+        "name": "C3",
+        "point": 3
+      },
+      {
+        "name": "D3",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": true,
+      "limitPoints": 10,
+      "isLimitRound": false,
+      "limitRound": 0,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-01-01T01:01:01.000"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A",
+        "point": 1
+      },
+      {
+        "name": "B",
+        "point": 2
+      },
+      {
+        "name": "C",
+        "point": 3
+      },
+      {
+        "name": "D",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": false,
+      "limitPoints": 0,
+      "isLimitRound": true,
+      "limitRound": 5,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-03-04T10:15:56.450"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A2",
+        "point": 1
+      },
+      {
+        "name": "B2",
+        "point": 2
+      },
+      {
+        "name": "C2",
+        "point": 3
+      },
+      {
+        "name": "D2",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": true,
+      "limitPoints": 10,
+      "isLimitRound": true,
+      "limitRound": 8,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-03-03T10:15:56.451"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A",
+        "point": 1
+      },
+      {
+        "name": "B",
+        "point": 2
+      },
+      {
+        "name": "C",
+        "point": 3
+      },
+      {
+        "name": "D",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": false,
+      "limitPoints": 0,
+      "isLimitRound": true,
+      "limitRound": 5,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-01-01T01:01:01.000"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A2",
+        "point": 1
+      },
+      {
+        "name": "B2",
+        "point": 2
+      },
+      {
+        "name": "C2",
+        "point": 3
+      },
+      {
+        "name": "D2",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": true,
+      "limitPoints": 10,
+      "isLimitRound": true,
+      "limitRound": 8,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-01-01T01:01:01.000"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A3",
+        "point": 1
+      },
+      {
+        "name": "B3",
+        "point": 2
+      },
+      {
+        "name": "C3",
+        "point": 3
+      },
+      {
+        "name": "D3",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": true,
+      "limitPoints": 10,
+      "isLimitRound": false,
+      "limitRound": 0,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-01-01T01:01:01.000"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A",
+        "point": 1
+      },
+      {
+        "name": "B",
+        "point": 2
+      },
+      {
+        "name": "C",
+        "point": 3
+      },
+      {
+        "name": "D",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": false,
+      "limitPoints": 0,
+      "isLimitRound": true,
+      "limitRound": 5,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-03-04T10:15:56.450"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A2",
+        "point": 1
+      },
+      {
+        "name": "B2",
+        "point": 2
+      },
+      {
+        "name": "C2",
+        "point": 3
+      },
+      {
+        "name": "D2",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": true,
+      "limitPoints": 10,
+      "isLimitRound": true,
+      "limitRound": 8,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-03-03T10:15:56.451"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A",
+        "point": 1
+      },
+      {
+        "name": "B",
+        "point": 2
+      },
+      {
+        "name": "C",
+        "point": 3
+      },
+      {
+        "name": "D",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": false,
+      "limitPoints": 0,
+      "isLimitRound": true,
+      "limitRound": 5,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-01-01T01:01:01.000"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A2",
+        "point": 1
+      },
+      {
+        "name": "B2",
+        "point": 2
+      },
+      {
+        "name": "C2",
+        "point": 3
+      },
+      {
+        "name": "D2",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": true,
+      "limitPoints": 10,
+      "isLimitRound": true,
+      "limitRound": 8,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-01-01T01:01:01.000"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A3",
+        "point": 1
+      },
+      {
+        "name": "B3",
+        "point": 2
+      },
+      {
+        "name": "C3",
+        "point": 3
+      },
+      {
+        "name": "D3",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": true,
+      "limitPoints": 10,
+      "isLimitRound": false,
+      "limitRound": 0,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-01-01T01:01:01.000"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A",
+        "point": 1
+      },
+      {
+        "name": "B",
+        "point": 2
+      },
+      {
+        "name": "C",
+        "point": 3
+      },
+      {
+        "name": "D",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": false,
+      "limitPoints": 0,
+      "isLimitRound": true,
+      "limitRound": 5,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-03-04T10:15:56.450"
+  },
+  {
+    "playerInfo": [
+      {
+        "name": "A2",
+        "point": 1
+      },
+      {
+        "name": "B2",
+        "point": 2
+      },
+      {
+        "name": "C2",
+        "point": 3
+      },
+      {
+        "name": "D2",
+        "point": 4
+      }
+    ],
+    "gameConfig": {
+      "isLimitPoints": true,
+      "limitPoints": 10,
+      "isLimitRound": true,
+      "limitRound": 8,
+      "isAutoCalculate": true,
+      "currentRound": 0
+    },
+    "now": "2025-03-03T10:15:56.451"
+  }
+]

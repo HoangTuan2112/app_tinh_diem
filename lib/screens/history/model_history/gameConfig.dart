@@ -50,7 +50,27 @@ class GameConfig  {
     this._currentRound = currentRound;
   }
 
-  
+   Map<String, dynamic> toJson() {
+     return {
+       'isLimitPoints': _isLimitPoints,
+       'limitPoints': _limitPoints,
+       'isLimitRound': _isLimitRound,
+       'limitRound': _limitRound,
+       'isAutoCalculate': _isAutoCalculate,
+       'currentRound': _currentRound,
+     };
+   }
+
+   factory GameConfig.fromJson(Map<String, dynamic> json) {
+     return GameConfig(
+       isLimitPoints: json['isLimitPoints'],
+       limitPoints: json['limitPoints'],
+       isLimitRound: json['isLimitRound'],
+       limitRound: json['limitRound'],
+       isAutoCalculate: json['isAutoCalculate'],
+       currentRound: json['currentRound'],
+     );
+   }
   
  
 

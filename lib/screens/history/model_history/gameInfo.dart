@@ -1,50 +1,68 @@
-
 import 'package:app_tinh_diem/screens/history/model_history/gameConfig.dart';
 import 'package:app_tinh_diem/screens/history/model_history/playerInfo.dart';
 
 class GameInfo {
-  List<PlayerInfo> _playerInfo=[];
+  List<PlayerInfo> _playerInfo = [];
   GameConfig? _gameConfig;
   DateTime? now;
 
-  GameInfo({required List<PlayerInfo> playerInfo, required GameConfig gameConfig}){
+  GameInfo(
+      {required List<PlayerInfo> playerInfo,
+      required GameConfig gameConfig,
+      required DateTime now}) {
     this._playerInfo = playerInfo;
     this._gameConfig = gameConfig;
-    this.now = DateTime.now();
+    this.now = now;
   }
-  GameInfo.empty(){
+
+  GameInfo.empty() {
     this._playerInfo = [];
     this._gameConfig = GameConfig.empty();
     this.now = DateTime.now();
   }
-  GameInfo.now({required List<PlayerInfo> playerInfo, required GameConfig gameConfig, required DateTime time}){
-    this._playerInfo = playerInfo;
-    this._gameConfig = gameConfig;
-    this.now = time;
-  }
-  List<PlayerInfo> get playerInfo => _playerInfo;
-  GameConfig? get gameConfig => _gameConfig;
- 
-  set playerInfo(List<PlayerInfo> playerInfo){
-    this._playerInfo = playerInfo;
-  }
-  set gameConfig(GameConfig? gameConfig){
-    this._gameConfig = gameConfig;
-  }
- 
 
-  int currentMaxPoints(){
+  // GameInfo.now({required List<PlayerInfo> playerInfo, required GameConfig gameConfig, required DateTime time}){
+  //   this._playerInfo = playerInfo;
+  //   this._gameConfig = gameConfig;
+  //   this.now = time;
+  // }
+  List<PlayerInfo> get playerInfo => _playerInfo;
+
+  GameConfig? get gameConfig => _gameConfig;
+
+  set playerInfo(List<PlayerInfo> playerInfo) {
+    this._playerInfo = playerInfo;
+  }
+
+  set gameConfig(GameConfig? gameConfig) {
+    this._gameConfig = gameConfig;
+  }
+
+  int currentMaxPoints() {
     int max = 0;
-    for (int i = 0; i < _playerInfo.length; i++){
-      if (_playerInfo[i].point! > max){
+    for (int i = 0; i < _playerInfo.length; i++) {
+      if (_playerInfo[i].point! > max) {
         max = _playerInfo[i].point!.toInt();
       }
     }
     return max;
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'playerInfo': _playerInfo.map((player) => player.toJson()).toList(),
+      'gameConfig': _gameConfig!.toJson(),
+      'now': now?.toIso8601String(),
+    };
+  }
 
-
-
-  
+  factory GameInfo.fromJson(Map<String, dynamic> json) {
+    return GameInfo(
+      playerInfo: (json['playerInfo'] as List)
+          .map((playerJson) => PlayerInfo.fromJson(playerJson))
+          .toList(),
+      gameConfig: GameConfig.fromJson(json['gameConfig']),
+      now: DateTime.parse(json['now']),
+    );
+  }
 }
