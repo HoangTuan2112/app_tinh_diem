@@ -70,15 +70,18 @@ class _GameComponentState extends State<GameComponent> {
         time = gameInfo.now.toString();
       }
     }
-
+    double height = MediaQuery.of(context).orientation == Orientation.portrait
+        ? MediaQuery.of(context).size.height * 0.12
+        : MediaQuery.of(context).size.width * 0.12;
     return Container(
       padding: EdgeInsets.all(10),
-      height: MediaQuery.of(context).size.height * 0.12,
+      height: height,
+
       color: Colors.grey[300],
       child: Row(
         children: [
           Expanded(
-            flex: 4,
+            flex: 5,
             child: FractionallySizedBox(
               heightFactor:
                   1.0, // Set the height to 100% of the parent container's height
@@ -97,6 +100,7 @@ class _GameComponentState extends State<GameComponent> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 5,),
                   Row(
                     children: [
                       Text(
@@ -107,6 +111,7 @@ class _GameComponentState extends State<GameComponent> {
                       ),
                     ],
                   ),
+                   SizedBox(height: 5,),
                   Row(
                     children: [
                       Text(
