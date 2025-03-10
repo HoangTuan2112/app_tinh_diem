@@ -114,15 +114,15 @@ class _NewGameScreenState extends State<NewGameScreen> {
   @override
   Widget build(BuildContext context) {
     final playerListProvider =
-        Provider.of<PlayerListProvider>(context); // Use Provider
+        Provider.of<PlayerListProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tạo trò chơi mới'),
-        backgroundColor: Colors.blue, // Or any color you prefer for the AppBar
-        elevation: 0, // Remove shadow if you want
+        backgroundColor: Colors.blue,
+        elevation: 0,
       ),
-      backgroundColor: Colors.white, // Change background color here
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -154,16 +154,19 @@ class _NewGameScreenState extends State<NewGameScreen> {
                     borderSide: BorderSide(color: Colors.red),
                   ),
                   focusedErrorBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Colors.red), // Style when focused and error
+                    borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Vui lòng nhập tên người chơi';
                   }
-                  // Split the input by commas, trim whitespace, and check the count.
-                  final names = value.split(',').map((e) => e.trim()).toList();
+
+                  final names = value
+                      .split(',')
+                      .map((e) => e.trim())
+                      .where((name) => name.isNotEmpty)
+                      .toList();
                   if (names.length != 4) {
                     return 'Vui lòng nhập đúng 4 tên người chơi';
                   }
@@ -292,15 +295,15 @@ class _NewGameScreenState extends State<NewGameScreen> {
                   'Tự động tính toán',
                   style: TextStyle(color: Colors.black),
                 ),
-                // Black text
+
                 value: _isAutoCalculate,
                 checkColor: Colors.white,
-                // Color of the checkmark
+
                 activeColor: Colors.blue,
-                // Color when checked
+
                 side: MaterialStateBorderSide.resolveWith(
                   (states) =>
-                      BorderSide(width: 1.0, color: Colors.grey), // Border
+                      BorderSide(width: 1.0, color: Colors.grey),
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -328,20 +331,20 @@ class _NewGameScreenState extends State<NewGameScreen> {
               ),
               const SizedBox(height: 8),
               Wrap(
-                spacing: 8.0, // Horizontal spacing
-                runSpacing: 8.0, // Vertical spacing
+                spacing: 8.0,
+                runSpacing: 8.0,
                 children: playerListProvider.playerNames.map((name) {
                   return InkWell(
                     onTap: () => _addPlayerName(name),
                     child: Chip(
                       label: Text(name),
                       backgroundColor:
-                          Colors.grey[300], // Light grey background for chips
+                          Colors.grey[300],
                     ),
                   );
                 }).toList(),
               ),
-              // --- End Display Saved Player Names ---
+
             ],
           ),
         ),
