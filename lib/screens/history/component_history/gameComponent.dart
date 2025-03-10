@@ -8,11 +8,10 @@ class GameComponent extends StatefulWidget {
   final VoidCallback? onDelete;
   final VoidCallback onCoppy;
 
-  GameComponent(
-      {super.key,
-      required this.gameInfo,
-      this.onDelete,
-      required this.onCoppy});
+  GameComponent({super.key,
+    required this.gameInfo,
+    this.onDelete,
+    required this.onCoppy});
 
   @override
   State<GameComponent> createState() => _GameComponentState();
@@ -39,7 +38,8 @@ class _GameComponentState extends State<GameComponent> {
     if (gameInfo.gameConfig?.isLimitPoints == true) {
       if (gameInfo.gameConfig?.isLimitRound == true) {
         limit +=
-            'gioi han diem: ${gameInfo.gameConfig?.limitPoints}, gioi han vong: ${gameInfo.gameConfig?.limitRound}';
+        'gioi han diem: ${gameInfo.gameConfig
+            ?.limitPoints}, gioi han vong: ${gameInfo.gameConfig?.limitRound}';
       } else {
         limit += 'gioi han diem: ${gameInfo.gameConfig?.limitPoints}';
       }
@@ -59,12 +59,21 @@ class _GameComponentState extends State<GameComponent> {
         time = 'Hôm qua';
       } else {
         time =
-            '${gameInfo.now?.day.toString()} tháng ${gameInfo.now?.month.toString()} năm ${gameInfo.now?.year.toString()}';
+        '${gameInfo.now?.day.toString()} tháng ${gameInfo.now?.month
+            .toString()} năm ${gameInfo.now?.year.toString()}';
       }
     }
-    double height = MediaQuery.of(context).orientation == Orientation.portrait
-        ? MediaQuery.of(context).size.height * 0.12
-        : MediaQuery.of(context).size.width * 0.12;
+    double height = MediaQuery
+        .of(context)
+        .orientation == Orientation.portrait
+        ? MediaQuery
+        .of(context)
+        .size
+        .height * 0.12
+        : MediaQuery
+        .of(context)
+        .size
+        .width * 0.12;
     return Container(
       padding: EdgeInsets.all(10),
       height: height,
@@ -75,7 +84,7 @@ class _GameComponentState extends State<GameComponent> {
             flex: 5,
             child: FractionallySizedBox(
               heightFactor:
-                  1.0, // Set the height to 100% of the parent container's height
+              1.0, // Set the height to 100% of the parent container's height
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -136,12 +145,13 @@ class _GameComponentState extends State<GameComponent> {
                         onPressed: () async {
                           try {
                             final copiedGame =
-                                await copyGame(widget.gameInfo!.id!);
+                            await copyGame(widget.gameInfo!.id!);
                             // Xử lý sau khi copy thành công (ví dụ: hiển thị thông báo)
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                   content: Text(
-                                      'Copied game successful ${copiedGame.id}')),
+                                      'Copied game successful ${copiedGame
+                                          .id}')),
                             );
                             widget.onCoppy.call();
                           } catch (e) {
@@ -174,7 +184,7 @@ class _GameComponentState extends State<GameComponent> {
                           }
                         },
                         child:
-                            Icon(Icons.delete, size: 20, color: Colors.black),
+                        Icon(Icons.delete, size: 20, color: Colors.black),
                       ),
                     ),
                   ],

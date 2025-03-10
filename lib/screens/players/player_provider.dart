@@ -82,6 +82,14 @@ class PlayerListProvider with ChangeNotifier {
     await _savePlayerNames(); // Save after deleting
     notifyListeners();
   }
+  //Add player name
+  Future<void> addPlayerName(String name) async {
+    if (!_playerNames.contains(name)) {
+      _playerNames.add(name);
+      await _savePlayerNames(); // Save after add
+      notifyListeners();
+    }
+  }
 
   // Add a refresh method
   Future<void> refreshPlayers() async {

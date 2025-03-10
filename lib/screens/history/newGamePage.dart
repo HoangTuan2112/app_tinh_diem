@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:provider/provider.dart';
 import 'package:app_tinh_diem/screens/history/model_history/gameConfig.dart';
 import 'package:app_tinh_diem/screens/history/model_history/gameInfo.dart';
 import 'package:app_tinh_diem/screens/history/model_history/playerInfo.dart';
-import 'package:app_tinh_diem/screens/history/mockAPI_service/api_service.dart'; // Import api_service
+import 'package:app_tinh_diem/screens/history/mockAPI_service/api_service.dart';
+import 'package:app_tinh_diem/screens/players/player_provider.dart';
 
 class NewGameScreen extends StatefulWidget {
   const NewGameScreen({Key? key}) : super(key: key);
@@ -15,21 +15,43 @@ class NewGameScreen extends StatefulWidget {
 
 class _NewGameScreenState extends State<NewGameScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  final _playerNameController = TextEditingController();
   final _limitPointsController = TextEditingController();
   final _limitRoundsController = TextEditingController();
-
+  final _playerNameController = TextEditingController();
   bool _isLimitPoints = false;
   bool _isLimitRounds = false;
   bool _isAutoCalculate = true;
 
+  List<String> _selectedPlayers = [];
+
   @override
   void dispose() {
-    _playerNameController.dispose();
     _limitPointsController.dispose();
     _limitRoundsController.dispose();
+    _playerNameController.dispose();
     super.dispose();
+  }
+
+  void _addPlayerName(String name) {
+    setState(() {
+      List<String> currentNames =
+          _playerNameController.text.split(',').map((e) => e.trim()).toList();
+      currentNames.removeWhere((element) => element.isEmpty);
+
+      if (!currentNames.contains(name) && currentNames.length < 4) {
+        currentNames.add(name);
+        _selectedPlayers = currentNames;
+
+        _playerNameController.text = currentNames.join(', ');
+        if (currentNames.length < 4) {
+          _playerNameController.text += ', ';
+        }
+
+        _playerNameController.selection = TextSelection.fromPosition(
+          TextPosition(offset: _playerNameController.text.length),
+        );
+      }
+    });
   }
 
   void _submitForm() async {
@@ -37,7 +59,9 @@ class _NewGameScreenState extends State<NewGameScreen> {
       List<String> playerNames = _playerNameController.text
           .split(',')
           .map((name) => name.trim())
+          .where((name) => name.isNotEmpty)
           .toList();
+
       List<PlayerInfo> players =
           playerNames.map((name) => PlayerInfo(name: name, point: 0)).toList();
 
@@ -60,11 +84,18 @@ class _NewGameScreenState extends State<NewGameScreen> {
       );
 
       try {
-        GameInfo createdGame =
-            await createGame(newGame); // Await the API call, use api_service
+        GameInfo createdGame = await createGame(newGame);
         print('Game created successfully: ${createdGame.id}');
 
-        Navigator.pop(context, true); // Go back to HistoryPage
+        final playerListProvider =
+            Provider.of<PlayerListProvider>(context, listen: false);
+        for (final player in players) {
+          if (!playerListProvider.playerNames.contains(player.name)) {
+            await playerListProvider.addPlayerName(player.name.toString());
+          }
+        }
+
+        Navigator.pop(context, true);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text('Trò chơi mới đã được tạo! ID: ${createdGame.id}')),
@@ -80,10 +111,16 @@ class _NewGameScreenState extends State<NewGameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final playerListProvider =
+        Provider.of<PlayerListProvider>(context); // Use Provider
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tạo trò chơi mới'),
+        backgroundColor: Colors.blue, // Or any color you prefer for the AppBar
+        elevation: 0, // Remove shadow if you want
       ),
+      backgroundColor: Colors.white, // Change background color here
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -92,26 +129,69 @@ class _NewGameScreenState extends State<NewGameScreen> {
             children: [
               TextFormField(
                 controller: _playerNameController,
+                // Use the controller
+                style: TextStyle(color: Colors.black),
+                // Black text for input
                 decoration: const InputDecoration(
                   labelText: 'Tên người chơi (A, B, C, ...)',
+                  labelStyle: TextStyle(color: Colors.grey),
+                  // Style for label text
                   hintText: 'Nhập tên 4 người chơi, cách nhau bằng dấu phẩy',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  // Style for hint
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Colors.grey), // Color when not focused
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.blue), // Color when focused
+                  ),
+                  errorBorder: UnderlineInputBorder(
+                    // Style when error
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                  focusedErrorBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Colors.red), // Style when focused and error
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Vui lòng nhập tên người chơi';
-                  } else if (value.split(',').length - 1 != 3 ||
-                      value.endsWith(',') ||
-                      value.contains(',,')) {
+                  }
+                  // Split the input by commas, trim whitespace, and check the count.
+                  final names = value.split(',').map((e) => e.trim()).toList();
+                  if (names.length != 4) {
                     return 'Vui lòng nhập đúng 4 tên người chơi';
                   }
-
+                  if (value.endsWith(',') || value.contains(',,')) {
+                    return 'Vui lòng nhập đúng 4 tên người chơi';
+                  }
                   return null;
+                },
+                onChanged: (value) {
+                  //Keep tracking on change
+                  _selectedPlayers =
+                      value.split(',').map((e) => e.trim()).toList();
                 },
               ),
               const SizedBox(height: 16),
               CheckboxListTile(
-                title: const Text('Giới hạn điểm'),
+                title: const Text(
+                  'Giới hạn điểm',
+                  style: TextStyle(color: Colors.black),
+                ),
+                // Black text
                 value: _isLimitPoints,
+                checkColor: Colors.white,
+                // Color of the checkmark
+                activeColor: Colors.blue,
+                // Color when checked
+                side: MaterialStateBorderSide.resolveWith(
+                  (states) => BorderSide(
+                      width: 1.0, color: Colors.grey), // Border color
+                ),
                 onChanged: (value) {
                   setState(() {
                     _isLimitPoints = value!;
@@ -121,9 +201,23 @@ class _NewGameScreenState extends State<NewGameScreen> {
               if (_isLimitPoints) ...[
                 TextFormField(
                   controller: _limitPointsController,
+                  style: TextStyle(color: Colors.black),
+                  // Black text
                   decoration: const InputDecoration(
                     labelText: 'Điểm giới hạn',
+                    labelStyle: TextStyle(color: Colors.grey),
                     hintText: 'Nhập điểm giới hạn',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    errorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red),
+                    ),
+                    focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red)),
                   ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -139,8 +233,17 @@ class _NewGameScreenState extends State<NewGameScreen> {
               ],
               const SizedBox(height: 16),
               CheckboxListTile(
-                title: const Text('Giới hạn vòng'),
+                title: const Text(
+                  'Giới hạn vòng',
+                  style: TextStyle(color: Colors.black),
+                ),
+                // Black text
                 value: _isLimitRounds,
+                checkColor: Colors.white,
+                activeColor: Colors.blue,
+                side: MaterialStateBorderSide.resolveWith(
+                  (states) => BorderSide(width: 1.0, color: Colors.grey),
+                ),
                 onChanged: (value) {
                   setState(() {
                     _isLimitRounds = value!;
@@ -150,9 +253,24 @@ class _NewGameScreenState extends State<NewGameScreen> {
               if (_isLimitRounds) ...[
                 TextFormField(
                   controller: _limitRoundsController,
+                  style: TextStyle(color: Colors.black),
+                  // Black text
                   decoration: const InputDecoration(
                     labelText: 'Số vòng giới hạn',
+                    labelStyle: TextStyle(color: Colors.grey),
                     hintText: 'Nhập số vòng giới hạn',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    errorBorder: UnderlineInputBorder(
+                      // Style when error
+                      borderSide: BorderSide(color: Colors.red),
+                    ),
+                    focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red)),
                   ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -168,8 +286,20 @@ class _NewGameScreenState extends State<NewGameScreen> {
               ],
               const SizedBox(height: 16),
               CheckboxListTile(
-                title: const Text('Tự động tính toán'),
+                title: const Text(
+                  'Tự động tính toán',
+                  style: TextStyle(color: Colors.black),
+                ),
+                // Black text
                 value: _isAutoCalculate,
+                checkColor: Colors.white,
+                // Color of the checkmark
+                activeColor: Colors.blue,
+                // Color when checked
+                side: MaterialStateBorderSide.resolveWith(
+                  (states) =>
+                      BorderSide(width: 1.0, color: Colors.grey), // Border
+                ),
                 onChanged: (value) {
                   setState(() {
                     _isAutoCalculate = value!;
@@ -179,8 +309,37 @@ class _NewGameScreenState extends State<NewGameScreen> {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: const Text('Tạo trò chơi'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue, // Blue button
+                ),
+                child: const Text(
+                  'Tạo trò chơi',
+                  style: TextStyle(color: Colors.white),
+                ), // White text
               ),
+
+              // --- Display Saved Player Names ---
+              const SizedBox(height: 24),
+              const Text(
+                'Gợi ý người chơi:',
+                style: TextStyle(color: Colors.grey, fontSize: 16), // Grey text
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8.0, // Horizontal spacing
+                runSpacing: 8.0, // Vertical spacing
+                children: playerListProvider.playerNames.map((name) {
+                  return InkWell(
+                    onTap: () => _addPlayerName(name),
+                    child: Chip(
+                      label: Text(name),
+                      backgroundColor:
+                          Colors.grey[300], // Light grey background for chips
+                    ),
+                  );
+                }).toList(),
+              ),
+              // --- End Display Saved Player Names ---
             ],
           ),
         ),
