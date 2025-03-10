@@ -56,7 +56,7 @@ class _GameComponentState extends State<GameComponent> {
       if (gameInfo.now?.day == now.day - 1) {
         time = 'Hôm qua';
       } else {
-        time = gameInfo.now.toString();
+        time = '${gameInfo.now?.day.toString()} tháng ${gameInfo.now?.month.toString()} năm ${gameInfo.now?.year.toString()}';
       }
     }
     double height = MediaQuery.of(context).orientation == Orientation.portrait

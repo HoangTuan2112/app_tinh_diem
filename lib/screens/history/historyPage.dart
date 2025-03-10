@@ -1,7 +1,6 @@
 import 'package:app_tinh_diem/screens/history/component_history/gameComponent.dart';
 import 'package:app_tinh_diem/screens/history/mockAPI_service/api_service.dart';
 import 'package:flutter/material.dart';
-
 import 'model_history/gameInfo.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -11,24 +10,75 @@ class HistoryPage extends StatefulWidget {
   State<HistoryPage> createState() => _HistoryPageState();
 }
 
+// Define an enum for the filter options.  MUCH better than using strings.
+enum FilterOption { today, yesterday, older }
+
 class _HistoryPageState extends State<HistoryPage> {
-  late Future<List<GameInfo>> _gamesFuture = [] as Future<List<GameInfo>>;
+  late Future<List<GameInfo>> _gamesFuture;
+  List<GameInfo> _allGames = [];
+  List<GameInfo> _filteredGames = [];
+  FilterOption _currentFilter = FilterOption.today; // Store filter as an enum
 
   @override
   void initState() {
     super.initState();
-    _gamesFuture = fetchGames();
+    _fetchAndFilterGames(); // Initial fetch and filter
   }
 
-  void _onDeleteGame() {
-    setState(() {
-      _gamesFuture = fetchGames(); // Fetch lại danh sách game
+  void _fetchAndFilterGames() {
+    _gamesFuture = fetchGames().then((games) {
+      _allGames = games;
+      _filteredGames = _filterGamesByDate(_allGames, _currentFilter);
+      return games;
     });
   }
 
+  void _onDeleteGame() {
+    _fetchAndFilterGames();
+    setState(() {}); // Trigger rebuild.
+  }
+
   void _onCoppyGame() {
+    _fetchAndFilterGames();
+    setState(() {}); // Trigger rebuild
+  }
+
+  // Filter games based on the FilterOption
+  List<GameInfo> _filterGamesByDate(List<GameInfo> games, FilterOption filter) {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
+    DateTime yesterday = today.subtract(Duration(days: 1));
+
+    switch (filter) {
+      case FilterOption.today:
+        return games
+            .where((game) =>
+        game.now != null &&
+            game.now!.year == today.year &&
+            game.now!.month == today.month &&
+            game.now!.day == today.day)
+            .toList();
+      case FilterOption.yesterday:
+        return games
+            .where((game) =>
+        game.now != null &&
+            game.now!.year == yesterday.year &&
+            game.now!.month == yesterday.month &&
+            game.now!.day == yesterday.day)
+            .toList();
+      case FilterOption.older:
+        return games
+            .where((game) => game.now != null && game.now!.isBefore(yesterday))
+            .toList();
+
+    }
+  }
+
+  // Update the filter and refresh the list
+  void _onFilterButtonPressed(FilterOption filter) {
     setState(() {
-      _gamesFuture = fetchGames(); // Fetch lại danh sách game
+      _currentFilter = filter;
+      _filteredGames = _filterGamesByDate(_allGames, _currentFilter);
     });
   }
 
@@ -38,42 +88,39 @@ class _HistoryPageState extends State<HistoryPage> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Filter Buttons (Improved UI)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ElevatedButton.icon(
-                  onPressed: () {},
-                  label: Text('Hôm nay'),
-                  icon: Icon(Icons.calendar_today)),
-              ElevatedButton.icon(
-                  onPressed: () {},
-                  label: Text('Hôm qua'),
-                  icon: Icon(Icons.calendar_today)),
-              ElevatedButton.icon(
-                  onPressed: () {},
-                  label: Text('Cũ hơn'),
-                  icon: Icon(Icons.calendar_today)),
+              _buildFilterButton(FilterOption.today, "Hôm nay"),
+              _buildFilterButton(FilterOption.yesterday, "Hôm qua"),
+              _buildFilterButton(FilterOption.older, "Cũ hơn"),
             ],
           ),
           Expanded(
             child: Container(
               padding: EdgeInsets.all(10),
               child: FutureBuilder<List<GameInfo>>(
-                // Sử dụng FutureBuilder
                 future: _gamesFuture,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  // ... (rest of your FutureBuilder code remains the same,
+                  //      using _filteredGames for itemCount and itemBuilder) ...
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
                     return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      // Truy cập length từ snapshot.data
+                      itemCount: _filteredGames.length,
                       itemBuilder: (context, index) {
                         return Column(
                           children: [
                             GameComponent(
-                                gameInfo: snapshot.data![index],
-                                onDelete: _onDeleteGame,
-                                onCoppy: _onCoppyGame),
-                            // Truy cập dữ liệu từ snapshot.data
+                              gameInfo: _filteredGames[index],
+                              onDelete: _onDeleteGame,
+                              onCoppy: _onCoppyGame,
+                            ),
                             SizedBox(
                               height: 16,
                             ),
@@ -81,10 +128,9 @@ class _HistoryPageState extends State<HistoryPage> {
                         );
                       },
                     );
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('${snapshot.error}'));
+                  } else {
+                    return Center(child: Text('Không có dữ liệu'));
                   }
-                  return Center(child: CircularProgressIndicator());
                 },
               ),
             ),
@@ -95,6 +141,20 @@ class _HistoryPageState extends State<HistoryPage> {
         onPressed: () {},
         icon: Icon(Icons.add),
         label: Text('Tạo trò chơi mới'),
+      ),
+    );
+  }
+
+  // Helper function to create filter buttons (DRY principle)
+  Widget _buildFilterButton(FilterOption filter, String label) {
+    return ElevatedButton.icon(
+      onPressed: () => _onFilterButtonPressed(filter),
+      icon: Icon(Icons.calendar_today),
+      label: Text(label),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: _currentFilter == filter
+            ? Colors.blueAccent[700] // Active filter: darker blue
+            : Colors.blueAccent, // Inactive filter: default blue
       ),
     );
   }
