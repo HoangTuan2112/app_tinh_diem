@@ -1,5 +1,6 @@
 import 'package:app_tinh_diem/screens/history/component_history/gameComponent.dart';
 import 'package:app_tinh_diem/screens/history/mockAPI_service/api_service.dart';
+import 'package:app_tinh_diem/screens/history/newGamePage.dart';
 import 'package:flutter/material.dart';
 import 'model_history/gameInfo.dart';
 
@@ -10,7 +11,6 @@ class HistoryPage extends StatefulWidget {
   State<HistoryPage> createState() => _HistoryPageState();
 }
 
-// Define an enum for the filter options.  MUCH better than using strings.
 enum FilterOption { today, yesterday, older }
 
 class _HistoryPageState extends State<HistoryPage> {
@@ -53,24 +53,23 @@ class _HistoryPageState extends State<HistoryPage> {
       case FilterOption.today:
         return games
             .where((game) =>
-        game.now != null &&
-            game.now!.year == today.year &&
-            game.now!.month == today.month &&
-            game.now!.day == today.day)
+                game.now != null &&
+                game.now!.year == today.year &&
+                game.now!.month == today.month &&
+                game.now!.day == today.day)
             .toList();
       case FilterOption.yesterday:
         return games
             .where((game) =>
-        game.now != null &&
-            game.now!.year == yesterday.year &&
-            game.now!.month == yesterday.month &&
-            game.now!.day == yesterday.day)
+                game.now != null &&
+                game.now!.year == yesterday.year &&
+                game.now!.month == yesterday.month &&
+                game.now!.day == yesterday.day)
             .toList();
       case FilterOption.older:
         return games
             .where((game) => game.now != null && game.now!.isBefore(yesterday))
             .toList();
-
     }
   }
 
@@ -88,7 +87,6 @@ class _HistoryPageState extends State<HistoryPage> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Filter Buttons (Improved UI)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -103,9 +101,6 @@ class _HistoryPageState extends State<HistoryPage> {
               child: FutureBuilder<List<GameInfo>>(
                 future: _gamesFuture,
                 builder: (context, snapshot) {
-                  // ... (rest of your FutureBuilder code remains the same,
-                  //      using _filteredGames for itemCount and itemBuilder) ...
-
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
@@ -138,9 +133,19 @@ class _HistoryPageState extends State<HistoryPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        icon: Icon(Icons.add),
-        label: Text('Tạo trò chơi mới'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NewGameScreen()),
+          ).then((value) {
+            if (value == true) {
+              _fetchAndFilterGames(); // Refetch and refilter
+              setState(() {});
+            }
+          });
+        },
+        icon: const Icon(Icons.add),
+        label: const Text('Tạo trò chơi mới'),
       ),
     );
   }
@@ -153,8 +158,8 @@ class _HistoryPageState extends State<HistoryPage> {
       label: Text(label),
       style: ElevatedButton.styleFrom(
         backgroundColor: _currentFilter == filter
-            ? Colors.blueAccent[700] // Active filter: darker blue
-            : Colors.blueAccent, // Inactive filter: default blue
+            ? Colors.blueAccent[700] // Active
+            : Colors.blueAccent, // Inactive
       ),
     );
   }

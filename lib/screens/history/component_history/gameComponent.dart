@@ -4,12 +4,15 @@ import 'package:app_tinh_diem/screens/history/model_history/gameInfo.dart';
 import 'package:flutter/material.dart';
 
 class GameComponent extends StatefulWidget {
-
   final GameInfo? gameInfo;
   final VoidCallback? onDelete;
   final VoidCallback onCoppy;
-  GameComponent({super.key, required this.gameInfo, this.onDelete, required this.onCoppy});
 
+  GameComponent(
+      {super.key,
+      required this.gameInfo,
+      this.onDelete,
+      required this.onCoppy});
 
   @override
   State<GameComponent> createState() => _GameComponentState();
@@ -56,7 +59,8 @@ class _GameComponentState extends State<GameComponent> {
       if (gameInfo.now?.day == now.day - 1) {
         time = 'Hôm qua';
       } else {
-        time = '${gameInfo.now?.day.toString()} tháng ${gameInfo.now?.month.toString()} năm ${gameInfo.now?.year.toString()}';
+        time =
+            '${gameInfo.now?.day.toString()} tháng ${gameInfo.now?.month.toString()} năm ${gameInfo.now?.year.toString()}';
       }
     }
     double height = MediaQuery.of(context).orientation == Orientation.portrait
@@ -65,7 +69,6 @@ class _GameComponentState extends State<GameComponent> {
     return Container(
       padding: EdgeInsets.all(10),
       height: height,
-
       color: Colors.grey[300],
       child: Row(
         children: [
@@ -89,7 +92,9 @@ class _GameComponentState extends State<GameComponent> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Row(
                     children: [
                       Text(
@@ -100,7 +105,9 @@ class _GameComponentState extends State<GameComponent> {
                       ),
                     ],
                   ),
-                   SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Row(
                     children: [
                       Text(
@@ -118,8 +125,7 @@ class _GameComponentState extends State<GameComponent> {
           Expanded(
             flex: 2,
             child: FractionallySizedBox(
-              heightFactor:
-                  1.0,
+              heightFactor: 1.0,
               child: Container(
                 color: Colors.grey[300],
                 child: Row(
@@ -130,16 +136,20 @@ class _GameComponentState extends State<GameComponent> {
                       child: TextButton(
                         onPressed: () async {
                           try {
-                            final copiedGame = await copyGame(widget.gameInfo!.id!);
+                            final copiedGame =
+                                await copyGame(widget.gameInfo!.id!);
                             // Xử lý sau khi copy thành công (ví dụ: hiển thị thông báo)
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Copied game successful ${copiedGame.id}')),
+                              SnackBar(
+                                  content: Text(
+                                      'Copied game successful ${copiedGame.id}')),
                             );
                             widget.onCoppy.call();
                           } catch (e) {
                             // Xử lý lỗi copy
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Failed to copy game: $e')),
+                              SnackBar(
+                                  content: Text('Failed to copy game: $e')),
                             );
                           }
                         },
@@ -147,7 +157,6 @@ class _GameComponentState extends State<GameComponent> {
                       ),
                     ),
                     SizedBox(
-
                       width: 40,
                       child: TextButton(
                         onPressed: () async {
@@ -160,11 +169,13 @@ class _GameComponentState extends State<GameComponent> {
                           } catch (e) {
                             // Xử lý lỗi delete
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Failed to delete game: $e')),
+                              SnackBar(
+                                  content: Text('Failed to delete game: $e')),
                             );
                           }
                         },
-                        child: Icon(Icons.delete, size: 20, color: Colors.black),
+                        child:
+                            Icon(Icons.delete, size: 20, color: Colors.black),
                       ),
                     ),
                   ],

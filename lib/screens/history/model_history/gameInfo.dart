@@ -8,10 +8,11 @@ class GameInfo {
   DateTime? now;
 
   GameInfo(
-      {required String id ,required List<PlayerInfo> playerInfo,
+      {required String id,
+      required List<PlayerInfo> playerInfo,
       required GameConfig gameConfig,
       required DateTime now}) {
-    this._id=id;
+    this._id = id;
     this._playerInfo = playerInfo;
     this._gameConfig = gameConfig;
     this.now = now;
@@ -22,7 +23,6 @@ class GameInfo {
     this._gameConfig = GameConfig.empty();
     this.now = DateTime.now();
   }
-
 
   List<PlayerInfo> get playerInfo => _playerInfo;
 
@@ -62,7 +62,8 @@ class GameInfo {
           .map((playerJson) => PlayerInfo.fromJson(playerJson))
           .toList(),
       gameConfig: GameConfig.fromJson(json['gameConfig']),
-      now: DateTime.parse(json['now']), id: json['id'],
+      now: DateTime.parse(json['now']),
+      id: json['id'],
     );
   }
 }

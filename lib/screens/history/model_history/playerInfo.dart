@@ -1,23 +1,29 @@
-
 class PlayerInfo {
-   String? _name;
-   double? _point;
+  String? _name;
+  double? _point;
+
   PlayerInfo({required String name, required double point}) {
     this._name = name;
     this._point = point;
   }
-    PlayerInfo.empty(){
+
+  PlayerInfo.empty() {
     this._name = '';
     this._point = 0;
   }
+
   String? get name => _name;
+
   double? get point => _point;
-  set name(String? name){
+
+  set name(String? name) {
     this._name = name;
   }
-  set point(double? point){
+
+  set point(double? point) {
     this._point = point;
   }
+
   Map<String, dynamic> toJson() {
     return {
       'name': name,
