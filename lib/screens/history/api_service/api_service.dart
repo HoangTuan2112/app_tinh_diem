@@ -1,9 +1,9 @@
-import 'package:app_tinh_diem/screens/history/model_history/gameInfo.dart';
+import 'package:app_tinh_diem/model/game_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../model_history/gameConfig.dart';
-import '../model_history/playerInfo.dart';
+import '../../../model/game_config.dart';
+import '../../../model/player_info.dart';
 
 Future<List<GameInfo>> fetchGames() async {
   final response = await http

@@ -1,5 +1,7 @@
-import 'package:app_tinh_diem/screens/history/model_history/gameConfig.dart';
-import 'package:app_tinh_diem/screens/history/model_history/playerInfo.dart';
+import 'package:app_tinh_diem/model/game_config.dart';
+import 'package:app_tinh_diem/model/player_info.dart';
+
+
 
 class GameInfo {
   String? _id;

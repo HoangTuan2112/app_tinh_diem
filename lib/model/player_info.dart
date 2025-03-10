@@ -1,8 +1,8 @@
 class PlayerInfo {
   String? _name;
-  double? _point;
+  int? _point;
 
-  PlayerInfo({required String name, required double point}) {
+  PlayerInfo({required String name, required int point}) {
     this._name = name;
     this._point = point;
   }
@@ -14,13 +14,13 @@ class PlayerInfo {
 
   String? get name => _name;
 
-  double? get point => _point;
+  int? get point => _point;
 
   set name(String? name) {
     this._name = name;
   }
 
-  set point(double? point) {
+  set point(int? point) {
     this._point = point;
   }
 
@@ -34,7 +34,7 @@ class PlayerInfo {
   factory PlayerInfo.fromJson(Map<String, dynamic> json) {
     return PlayerInfo(
       name: json['name'],
-      point: (json['point'] as num).toDouble(),
+      point: (json['point'] as num).toInt(),
     );
   }
 }

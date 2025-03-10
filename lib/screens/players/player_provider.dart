@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:app_tinh_diem/screens/history/mockAPI_service/api_service.dart';
+import 'package:app_tinh_diem/screens/history/api_service/api_service.dart';
 
 class PlayerListProvider with ChangeNotifier {
   static const _prefsKey = 'playerNames';

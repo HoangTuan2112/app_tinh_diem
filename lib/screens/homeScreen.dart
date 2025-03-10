@@ -1,7 +1,7 @@
 // homeScreen.dart
-import 'package:app_tinh_diem/screens/history/historyPage.dart';
-import 'package:app_tinh_diem/screens/players/playerPage.dart';
-import 'package:app_tinh_diem/screens/settings/settingsPage.dart';
+import 'package:app_tinh_diem/screens/history/history_screen.dart';
+import 'package:app_tinh_diem/screens/players/player_screen.dart';
+import 'package:app_tinh_diem/screens/settings/setting_screen.dart';
 import 'package:flutter/material.dart';
 
 class Homescreen extends StatefulWidget {

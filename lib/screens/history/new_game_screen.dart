@@ -1,10 +1,12 @@
+import 'package:app_tinh_diem/model/player_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:app_tinh_diem/screens/history/model_history/gameConfig.dart';
-import 'package:app_tinh_diem/screens/history/model_history/gameInfo.dart';
-import 'package:app_tinh_diem/screens/history/model_history/playerInfo.dart';
-import 'package:app_tinh_diem/screens/history/mockAPI_service/api_service.dart';
+import 'package:app_tinh_diem/model/game_info.dart';
+
+import 'package:app_tinh_diem/screens/history/api_service/api_service.dart';
 import 'package:app_tinh_diem/screens/players/player_provider.dart';
+
+import '../../model/game_config.dart';
 
 class NewGameScreen extends StatefulWidget {
   const NewGameScreen({Key? key}) : super(key: key);
@@ -22,7 +24,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
   bool _isLimitRounds = false;
   bool _isAutoCalculate = true;
 
-  List<String> _selectedPlayers = [];
+  late List<String> _selectedPlayers = [];
 
   @override
   void dispose() {

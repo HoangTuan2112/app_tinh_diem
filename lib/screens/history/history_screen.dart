@@ -1,8 +1,10 @@
-import 'package:app_tinh_diem/screens/history/component_history/gameComponent.dart';
-import 'package:app_tinh_diem/screens/history/mockAPI_service/api_service.dart';
-import 'package:app_tinh_diem/screens/history/newGamePage.dart';
+import 'package:app_tinh_diem/model/game_info.dart';
+import 'package:app_tinh_diem/screens/history/api_service/api_service.dart';
+import 'package:app_tinh_diem/screens/history/component/gameComponent.dart';
+
+import 'package:app_tinh_diem/screens/history/new_game_screen.dart';
 import 'package:flutter/material.dart';
-import 'model_history/gameInfo.dart';
+
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
