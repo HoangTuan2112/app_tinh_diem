@@ -3,7 +3,6 @@ import 'package:app_tinh_diem/model/game_info.dart';
 import 'package:app_tinh_diem/screens/playing/playing.dart';
 import 'package:flutter/material.dart';
 
-
 class GameComponent extends StatefulWidget {
   final GameInfo? gameInfo;
   final VoidCallback? onDelete;
@@ -53,7 +52,7 @@ class _GameComponentState extends State<GameComponent> {
     if (gameInfo.gameConfig?.isLimitPoints == true) {
       if (gameInfo.gameConfig?.isLimitRound == true) {
         limit +=
-            'gioi han diem: ${gameInfo.gameConfig?.limitPoints}, gioi han vong: ${gameInfo.gameConfig?.limitRound}';
+        'gioi han diem: ${gameInfo.gameConfig?.limitPoints}, gioi han vong: ${gameInfo.gameConfig?.limitRound}';
       } else {
         limit += 'gioi han diem: ${gameInfo.gameConfig?.limitPoints}';
       }
@@ -72,7 +71,7 @@ class _GameComponentState extends State<GameComponent> {
         time = 'Hôm qua';
       } else {
         time =
-            '${gameInfo.now?.day.toString()} tháng ${gameInfo.now?.month.toString()} năm ${gameInfo.now?.year.toString()}';
+        '${gameInfo.now?.day.toString()} tháng ${gameInfo.now?.month.toString()} năm ${gameInfo.now?.year.toString()}';
       }
     }
 
@@ -93,34 +92,49 @@ class _GameComponentState extends State<GameComponent> {
               heightFactor: 1.0,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start (left)
                 children: [
+                  // Player Names (Wrapped in Expanded and Text Widget)
                   Row(
                     children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      Expanded( // Wrap with Expanded
+                        child: Text(
+                          name,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis, // Handle overflow with ellipsis
+                          maxLines: 1, // Limit to one line
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 5),
+                  // Limit Text (Wrapped in Expanded)
                   Row(
                     children: [
-                      Text(
-                        limit,
-                        style: const TextStyle(fontSize: 15),
+                      Expanded(
+                        child: Text(
+                          limit,
+                          style: const TextStyle(fontSize: 15),
+                          overflow: TextOverflow.ellipsis, // Handle overflow
+                          maxLines: 1, // Limit
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 5),
+                  // Time Text
                   Row(
                     children: [
-                      Text(
-                        time,
-                        style: const TextStyle(fontSize: 15),
+                      Expanded( //Also good to wrap this one
+                        child: Text(
+                          time,
+                          style: const TextStyle(fontSize: 15),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                       ),
                     ],
                   ),
@@ -152,7 +166,7 @@ class _GameComponentState extends State<GameComponent> {
                         }
                       },
                       child:
-                          const Icon(Icons.copy, size: 20, color: Colors.black),
+                      const Icon(Icons.copy, size: 20, color: Colors.black),
                     ),
                   ),
                   SizedBox(

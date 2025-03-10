@@ -2,7 +2,6 @@ import 'package:app_tinh_diem/model/game_info.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
-
 class GameDetailScreen extends StatefulWidget {
   final GameInfo? gameInfo;
 
@@ -15,8 +14,8 @@ class GameDetailScreen extends StatefulWidget {
 class _GameDetailScreenState extends State<GameDetailScreen> {
   late List<String?> playerNames;
   late List<int> playerScores;
-  late String maxRounds ="∞";
-  late String maxScore="∞";
+  late String maxRounds = "∞";
+  late String maxScore = "∞";
   late int currentRound;
   late int currentMaxScore;
   List<dynamic> gameRounds = [];
@@ -27,21 +26,21 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
     if (widget.gameInfo != null) {
       playerNames =
           widget.gameInfo!.playerInfo.map((player) => player.name).toList();
-      // Initialize scores to 0 or get them from your data source
-      playerScores = widget.gameInfo!.playerInfo.map((player) => player.point).cast<int>().toList();
-      if(widget.gameInfo!.gameConfig!.isLimitRound){
-        maxRounds=(widget.gameInfo!.gameConfig?.limitRound) .toString();
-      }
-      else {
+      playerScores = widget.gameInfo!.playerInfo
+          .map((player) => player.point)
+          .cast<int>()
+          .toList();
+      if (widget.gameInfo!.gameConfig!.isLimitRound) {
+        maxRounds = (widget.gameInfo!.gameConfig?.limitRound).toString();
+      } else {
         maxRounds = "∞";
       }
-      if(widget.gameInfo!.gameConfig!.isLimitPoints){
-        maxScore=(widget.gameInfo!.gameConfig?.limitPoints) .toString();
-      }
-      else {
+      if (widget.gameInfo!.gameConfig!.isLimitPoints) {
+        maxScore = (widget.gameInfo!.gameConfig?.limitPoints).toString();
+      } else {
         maxScore = "∞";
       }
-      currentRound = widget.gameInfo!.gameConfig?.currentRound?? 0;
+      currentRound = widget.gameInfo!.gameConfig?.currentRound ?? 0;
       currentMaxScore = playerScores.max;
     }
   }
@@ -53,25 +52,36 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
       // maxRounds = gameRounds.length as String;
     });
   }
+  // Modified _truncatePlayerName to consider orientation
+  String _truncatePlayerName(String? name, Orientation orientation) {
+    if (name == null) {
+      return '?';
+    }
+    if (orientation == Orientation.portrait && name.length > 8) { // Only truncate in portrait
+      return name.substring(0, 8) + '...';
+    }
+    return name; // Return full name in landscape
+  }
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation; // Get orientation
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chi tiết trò chơi'),
-        backgroundColor: Colors.blue, // Match the image
-        elevation: 0, // Remove the shadow
+        backgroundColor: Colors.blue,
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: () {
-              // TODO: Implement settings
               print('Settings Pressed');
             },
             icon: const Icon(Icons.settings),
           ),
         ],
       ),
-      backgroundColor: Colors.white, // Match the image
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           // Player Scores Display
@@ -83,28 +93,26 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                 return Column(
                   children: [
                     Text(
-                      playerNames[index] ?? '?',
+                      _truncatePlayerName(playerNames[index], orientation), // Pass orientation
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 14,
-                          fontWeight: FontWeight.w500), // Style consistent
-                      overflow: TextOverflow.ellipsis, // Prevent overflow
+                          fontWeight: FontWeight.w500),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 8),
-                    // Stack for layout
                     Stack(
                       alignment: Alignment.center,
                       children: [
-
                         CircleAvatar(
                           backgroundColor: Colors.blue,
-                          radius: 20, // Adjust the radius as needed
+                          radius: 20,
                           child: Text(
-                            '${playerScores[index]}', // Display score
+                            '${playerScores[index]}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20, // Adjust font size
+                              fontSize: 20,
                             ),
                           ),
                         ),
@@ -120,7 +128,6 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(
-
               '[ Ván tối đa: $currentRound/$maxRounds, Điểm số tối đa:  $currentMaxScore/$maxScore ]',
               style: const TextStyle(color: Colors.black),
             ),
@@ -129,41 +136,37 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
           // Game Rounds Display (Conditional)
           Expanded(
             child: gameRounds.isEmpty
-                ? Center(
-                    // Center the content
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      // Center vertically
-                      children: [
-                        const Icon(Icons.sentiment_dissatisfied,
-                            size: 64, color: Colors.grey), // Icon with styling
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Chưa có ván chơi nào',
-                          style: TextStyle(
-                              color: Colors.grey, fontSize: 18), // Styling
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Thêm ván mới bằng cách bấm vào\nhình (+) bên dưới',
-                          // Added newline for better display
-                          style: TextStyle(color: Colors.grey),
-                          textAlign: TextAlign.center, // Center-align the text
-                        ),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    itemCount: gameRounds.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                          'Round ${index + 1}: ${gameRounds[index]}',
-                          style: TextStyle(color: Colors.black),
-                        ), // Style the round display
-                      );
-                    },
+                ? const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.sentiment_dissatisfied,
+                      size: 64, color: Colors.grey),
+                  SizedBox(height: 16),
+                  Text(
+                    'Chưa có ván chơi nào',
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
                   ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Thêm ván mới bằng cách bấm vào\nhình (+) bên dưới',
+                    style: TextStyle(color: Colors.grey),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            )
+                : ListView.builder(
+              itemCount: gameRounds.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(
+                    'Round ${index + 1}: ${gameRounds[index]}',
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
