@@ -1,3 +1,7 @@
+kết quả đạt được tại 10/3:
+![Ảnh 1](https://github.com/HoangTuan2112/app_tinh_diem/blob/master/ketqua/ket_qua_commit_ngay_10_thang_3.gif)
+
+
 kết quả đạt được tại commit 11:
 
 ![Ảnh 1](https://github.com/HoangTuan2112/app_tinh_diem/blob/master/ketqua/ket_qua_commit11.gif)
