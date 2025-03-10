@@ -1,13 +1,20 @@
-import 'package:app_tinh_diem/screens/homeScreen.dart';
+// main.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:app_tinh_diem/screens/homeScreen.dart';
+import 'package:app_tinh_diem/screens/players/player_provider.dart';  // Import the new provider
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider( // Provide PlayerListProvider to the app
+      create: (context) => PlayerListProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -22,5 +29,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

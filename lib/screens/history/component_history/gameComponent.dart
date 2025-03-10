@@ -36,7 +36,6 @@ class _GameComponentState extends State<GameComponent> {
     }
 
     String limit = '';
-    //noi chuoi limit thanh "gioi han diem: gameInfo.gameConfig.limitPoints, gioi han vong: gameInfo.gameConfig.limitRound"
     if (gameInfo.gameConfig?.isLimitPoints == true) {
       if (gameInfo.gameConfig?.isLimitRound == true) {
         limit +=

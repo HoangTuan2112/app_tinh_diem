@@ -1,3 +1,4 @@
+// homeScreen.dart
 import 'package:app_tinh_diem/screens/history/historyPage.dart';
 import 'package:app_tinh_diem/screens/players/playerPage.dart';
 import 'package:app_tinh_diem/screens/settings/settingsPage.dart';
@@ -24,12 +25,12 @@ class _HomescreenState extends State<Homescreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.history), label: listTitle[0],),
+            icon: Icon(Icons.history), label: listTitle[0],),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: listTitle[1],),
+            icon: Icon(Icons.person), label: listTitle[1],),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: listTitle[2],),
-          
+            icon: Icon(Icons.settings), label: listTitle[2],),
+
         ],
         type: BottomNavigationBarType.fixed,
         currentIndex:selectedIndex,
@@ -41,19 +42,19 @@ class _HomescreenState extends State<Homescreen> {
       body: handlePage(this.selectedIndex),
     );
   }
-  
+
   void onTapHandler(int index) {
-    this.setState(() {
+    setState(() { // Use setState is important
       selectedIndex=index;
       appbarTittle= listTitle[index];
     });
   }
-  
+
   Widget handlePage(int index) {
     if(selectedIndex==0){
       return HistoryPage();
     }else if( selectedIndex==1){
-      return Players();
+      return Players(); // Return Players page
     }
     else{
       return Settings();
@@ -61,7 +62,3 @@ class _HomescreenState extends State<Homescreen> {
 
   }
 }
-
-
-
-

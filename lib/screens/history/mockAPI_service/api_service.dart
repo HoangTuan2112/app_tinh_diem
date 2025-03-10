@@ -22,7 +22,7 @@ Future<GameInfo> copyGame(String gameId) async {
       Uri.parse('https://67c7c277c19eb8753e7a9e2b.mockapi.io/games/$gameId'));
   if (response.statusCode == 200) {
     final Map<String, dynamic> jsonData = jsonDecode(response.body);
-    // Tạo một GameInfo mới từ dữ liệu JSON, nhưng thay đổi id và now
+
     final newGameInfo = GameInfo(
       id: '',
       playerInfo: (jsonData['playerInfo'] as List)
@@ -63,16 +63,32 @@ Future<GameInfo> createGame(GameInfo newGame) async {
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(newGame.toJson()), // Send the GameInfo object as JSON
+    body: jsonEncode(newGame.toJson()),
   );
 
   if (response.statusCode == 201) {
-    // If the server returns a 201 CREATED response, parse the JSON and return the new GameInfo.
     return GameInfo.fromJson(jsonDecode(response.body));
   } else {
-    // If the server did not return a 201 CREATED response,
-    // throw an exception.
     throw Exception(
         'Failed to create game. Status code: ${response.statusCode}, Body: ${response.body}');
   }
+}
+
+// Inside api_service.dart
+Future<List<String>> fetchPlayerNamesClientSide() async {
+  final List<GameInfo> games = await fetchGames();
+  print("Fetched games: $games"); // Debug print
+
+  final Set<String> playerNames = {};
+
+  for (final game in games) {
+    print("Game ID: ${game.id}"); // Debug print
+    for (final player in game.playerInfo) {
+      print("Player Name: ${player.name}"); // Debug print
+      playerNames.add(player.name!.trim());
+    }
+  }
+
+  print("Extracted player names: $playerNames"); // Debug print
+  return playerNames.toList();
 }
