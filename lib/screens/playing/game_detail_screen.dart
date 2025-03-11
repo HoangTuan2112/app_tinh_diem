@@ -1,4 +1,7 @@
 import 'package:app_tinh_diem/model/game_info.dart';
+import 'package:app_tinh_diem/model/round.dart'; // Import the Round model
+import 'package:app_tinh_diem/screens/history/api_service/api_service.dart';
+import 'package:app_tinh_diem/screens/playing/add_round_screen.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
@@ -18,40 +21,40 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   late String maxScore = "∞";
   late int currentRound;
   late int currentMaxScore;
-  List<dynamic> gameRounds = [];
+  late GameInfo currentGame; // Store the current game locally
 
   @override
   void initState() {
     super.initState();
     if (widget.gameInfo != null) {
-      playerNames =
-          widget.gameInfo!.playerInfo.map((player) => player.name).toList();
-      playerScores = widget.gameInfo!.playerInfo
-          .map((player) => player.point)
-          .cast<int>()
-          .toList();
-      if (widget.gameInfo!.gameConfig!.isLimitRound) {
-        maxRounds = (widget.gameInfo!.gameConfig?.limitRound).toString();
-      } else {
-        maxRounds = "∞";
+      currentGame = widget.gameInfo!; // Initialize currentGame
+      playerNames = currentGame.playerInfo.map((player) => player.name).toList();
+      playerScores = _calculateTotalScores(currentGame);
+      currentRound = currentGame.rounds.length;
+      currentMaxScore = playerScores.isNotEmpty ? playerScores.max : 0;
+
+      if (currentGame.gameConfig!.isLimitRound) {
+        maxRounds = currentGame.gameConfig!.limitRound.toString();
       }
-      if (widget.gameInfo!.gameConfig!.isLimitPoints) {
-        maxScore = (widget.gameInfo!.gameConfig?.limitPoints).toString();
-      } else {
-        maxScore = "∞";
+      if (currentGame.gameConfig!.isLimitPoints) {
+        maxScore = currentGame.gameConfig!.limitPoints.toString();
       }
-      currentRound = widget.gameInfo!.gameConfig?.currentRound ?? 0;
-      currentMaxScore = playerScores.max;
     }
   }
+  List<int> _calculateTotalScores(GameInfo game) {
+    final numPlayers = game.playerInfo.length;
+    final totalScores = List<int>.filled(numPlayers, 0);
 
-  void _addRound() {
-    print('Add Round Pressed');
-    setState(() {
-      gameRounds.add("New Round");
-      // maxRounds = gameRounds.length as String;
-    });
+    for (final round in game.rounds) {
+      for (int i = 0; i < numPlayers; i++) {
+        if (i < round.scores.length) {
+          totalScores[i] += round.scores[i];
+        }
+      }
+    }
+    return totalScores;
   }
+
   // Modified _truncatePlayerName to consider orientation
   String _truncatePlayerName(String? name, Orientation orientation) {
     if (name == null) {
@@ -61,6 +64,50 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
       return name.substring(0, 8) + '...';
     }
     return name; // Return full name in landscape
+  }
+
+  void _addRound() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddRoundScreen(
+          playerNames: playerNames.map((name) => name ?? 'Unknown').toList(), // Handle null names
+          roundNumber: currentRound + 1, // Pass the next round number
+          onSave: (Round newRound) {
+            // Update local state (add the new round)
+            setState(() {
+              currentGame = currentGame.copyWith(
+                  rounds: List.from(currentGame.rounds)..add(newRound));
+              currentRound = currentGame.rounds.length;
+              playerScores =
+                  _calculateTotalScores(currentGame); // Recalculate
+              currentMaxScore = playerScores.max;
+            });
+
+            // Update the game on the server.  VERY IMPORTANT
+            _updateGameOnServer();
+
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<void> _updateGameOnServer() async {
+    try{
+      await updateGame(currentGame); // Use api_service
+      // Optionally show success message.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Round added and game updated!")),
+      );
+
+    } catch(e){
+      // Show error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to update game: $e")),
+      );
+      // Consider reverting local state if the update failed.
+    }
   }
 
   @override
@@ -135,7 +182,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
 
           // Game Rounds Display (Conditional)
           Expanded(
-            child: gameRounds.isEmpty
+            child: currentGame.rounds.isEmpty
                 ? const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -157,13 +204,21 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               ),
             )
                 : ListView.builder(
-              itemCount: gameRounds.length,
+              itemCount: currentGame.rounds.length,
               itemBuilder: (context, index) {
+                final round = currentGame.rounds[index];
                 return ListTile(
                   title: Text(
-                    'Round ${index + 1}: ${gameRounds[index]}',
+                    'Ván ${round.roundNumber}', // Show round number
                     style: const TextStyle(color: Colors.black),
                   ),
+                  subtitle: Row( // Display scores in subtitle
+                    children: round.scores.map((score) =>
+                        Padding(
+                            padding: EdgeInsets.only(right: 16.0),
+                            child: Text('$score'))).toList(),
+                  ),
+                  // Add more details (notes, etc.) as needed
                 );
               },
             ),
@@ -171,7 +226,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _addRound,
+        onPressed: _addRound, // Use _addRound
         backgroundColor: Colors.blue,
         icon: const Icon(Icons.add),
         label: const Text('THÊM VÁN MỚI'),

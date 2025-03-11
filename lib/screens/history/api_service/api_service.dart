@@ -74,6 +74,24 @@ Future<GameInfo> createGame(GameInfo newGame) async {
   }
 }
 
+Future<GameInfo> updateGame(GameInfo updatedGame) async {
+  final response = await http.put(
+    Uri.parse(
+        'https://67c7c277c19eb8753e7a9e2b.mockapi.io/games/${updatedGame.id}'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(updatedGame.toJson()),
+  );
+  if (response.statusCode == 200) {
+    return GameInfo.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception(
+        'Failed to update game. Status code: ${response.statusCode}, Body: ${response.body}');
+  }
+}
+
+
 // Inside api_service.dart
 Future<List<String>> fetchPlayerNamesClientSide() async {
   final List<GameInfo> games = await fetchGames();

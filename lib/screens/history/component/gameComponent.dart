@@ -1,6 +1,6 @@
 import 'package:app_tinh_diem/screens/history/api_service/api_service.dart';
 import 'package:app_tinh_diem/model/game_info.dart';
-import 'package:app_tinh_diem/screens/playing/playing.dart';
+import 'package:app_tinh_diem/screens/playing/game_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class GameComponent extends StatefulWidget {
